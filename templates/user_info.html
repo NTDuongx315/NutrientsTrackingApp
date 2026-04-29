@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script>
+    const foodList = JSON.parse('{{ food_list_dict|tojson|safe }}');
+</script>
+<h2> {{ user.name }}'s meals</h2>
+    {% for each in user.meals %}
+        <div class="mealInfo">
+            <h3>{{ each.name }}</h3>
+            {% for food in each.foodlist %}
+                <div class="foodMealInfo">
+                    <p>{{ food.food.name }}: {{ food.amount }}g</p>
+
+                    <!-- Adjust food amount in meal -->
+                    <button type="button" onclick="displayNextElement(this)"> Adjust </button>
+                    <form class="formNeedInputFood"
+                    action="{{ url_for('adjust_foodmeal', 
+                                        user_id=user.id, 
+                                        food_id=food.id) }}" 
+                    method="post" style="display: none;">
+                        <label> Amount:
+                            <input style="max-width: 55%;" type="number" name="amount" placeholder="Amount (g)" required>
+                        </label>
+                        <button type="submit">Submit</button>
+                    </form>
+
+                    <!-- Delete food from meal -->
+                    <form 
+                    action="{{ url_for('delete_foodmeal', 
+                                        user_id=user.id, 
+                                        food_id=food.id) }}" 
+                    method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+            {% endfor %}
+
+            <!-- Add food to meal -->
+            <button type="button" onclick="displayNextElement(this)"> Add food to meal </button>
+            <form class="formNeedInput"
+            action="{{ url_for('add_foodmeal',
+                                user_id=user.id,
+                                meal_id=each.id)}}"
+            method="post" style="display: none;">
+                <button type="button" onclick="addFood2NewMeal(this, foodList)"> Add </button>
+                <button type="submit"> Submit </button>
+            </form>
+
+            <!-- Delete meal -->
+            <form 
+            action="{{ url_for('delete_meal',
+                                user_id=user.id,
+                                meal_id=each.id)}}"
+            method="post">
+                <button type="submit">Delete meal</button>
+            </form>
+
+            <!-- Get macronutrients -->
+            <button type="button" onclick="displayNextElement(this)"> Get macronutrients </button>
+            <div style="display: none;  background-color: white; width: 25%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            border: 5px solid goldenrod;">
+                <span>{{ each.getMacros().protein|round|int }}g protein</span>
+                <span>{{ each.getMacros().carbs|round|int }}g carbs</span>
+                <span>{{ each.getMacros().fat|round|int }}g fat</span>
+                <span>{{ each.getMacros().calories|round|int }}kcal</span>
+            </div>
+        </div>
+    {% endfor %}
+
+    <button type="button" style="display: block;"
+    onclick="displayNextElement(this)"> Add meal </button>
+    <form class="formNeedInput"
+    action="{{ url_for('add_meal', 
+                        user_id=user.id) }}"
+    method="post" style="display: none;">
+        <label>Meal name:
+            <input type="text" name="name" placeholder="Enter meal name" required>
+        </label>
+        <button type="button" onclick="addFood2NewMeal(this, foodList)"> Add food </button>
+        <button type="submit"> Submit </button>
+    </form>
+
+    <!-- Get macronutrients for all meals -->
+    <button type="button" onclick="displayNextElement(this)"> Get macronutrients all meals </button>
+    <div style="display: none; background-color: white;  
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border: 5px solid goldenrod;">
+        <span>{{ user.getTotalMacros().protein|round|int }}g protein</span>
+        <span>{{ user.getTotalMacros().carbs|round|int }}g carbs</span>
+        <span>{{ user.getTotalMacros().fat|round|int }}g fat</span>
+        {% if user.getTotalMacros().calories|round|int > user.tdee %}
+            <span style="color: green;">{{ user.getTotalMacros().calories|round|int }}kcal</span>
+        {% else %}
+            <span style="color: red;">{{ user.getTotalMacros().calories|round|int }}kcal</span>
+        {% endif %}
+    </div>
+
+    <form 
+    action="{{ url_for('logout',
+                        user_id=user.id)}}"
+    method="post">
+        <button type="submit"> Logout </button>
+    </form>
+
+{% endblock %}

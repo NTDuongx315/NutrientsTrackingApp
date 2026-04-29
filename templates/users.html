@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Users</h2>
+<div class="data_table">
+    <div>
+        <h3>ID</h3>
+        {% for each in users %}
+            <p>{{ each.id }}</p>
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Name</h3>
+        {% for each in users %}
+            <p class="UserInfo">
+                <a style="color: black;" href="{{ url_for('user_info', user_id=each.id) }}"> 
+                    {{ each.name }} 
+                </a>
+            </p>
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Age</h3>
+        {% for each in users %}
+            <p>{{ each.age }}</p>
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Gender</h3>
+        {% for each in users %}
+            <p>{{ each.gender }}</p>
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Height</h3>
+        {% for each in users %}
+            <p>{{ each.height }}</p>
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Weight</h3>
+        {% for each in users %}
+            <p>{{ each.weight }}</p>
+        {% endfor %}
+    </div>
+    <div>
+        <h3>TDEE</h3>
+        {% for each in users %}
+            <p>{{ each.tdee|round }}</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

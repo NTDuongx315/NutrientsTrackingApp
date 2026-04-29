@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Food</h2>
+<div class="data_table">
+    <div>
+        <h3>Name</h3>
+        {% for each in food %}
+            <p>{{ each.name }}</p>
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Calories</h3>
+        {% for each in food %}
+            <p>{{ each.calories }}</p>
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Protein</h3>
+        {% for each in food %}
+            <p>{{ each.protein }}</p>
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Carbs</h3>
+        {% for each in food %}
+            <p>{{ each.carbs }}</p>
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Fat</h3>
+        {% for each in food %}
+            <p>{{ each.fat }}</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
