@@ -1,0 +1,21 @@
+language: python
+python:
+  - "3.9"
+install:
+  - pip install flask
+  - pip install flask-sqlalchemy
+  - pip install requests
+  - pip install flask_login
+  - pip install pytest-cov
+
+before_script:
+  - python manage.py runserver &
+  - sleep 5                      
+
+script:
+  - python -m pytest --cov
+
+after_script:
+  - pkill -f "python manage.py runserver" 
+
+
